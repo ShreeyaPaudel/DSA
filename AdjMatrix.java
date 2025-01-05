@@ -47,6 +47,31 @@ public class AdjMatrix {
 
     //print matrix
 
+    //breadth first search
+
+    void BFS(int source){
+        Queue q=new Queue(vertices);
+        boolean visited []= new boolean[vertices];
+        q.enqueue(source);
+        visited[source]=true;
+        while (!q.isEmpty()) {
+            int x= q.dequeue();
+            System.out.println(x);
+            // call getAdjNodes function and interate through list
+            for(int j = 0;j<vertices; j++){
+                if(matrix[x][j]!=0){
+                    if(!visited[j]){
+                        q.enqueue(j);
+                        visited[j]=true;
+                    }
+                }
+            }
+        }
+
+
+
+    }
+
     public static void main(String[] args) {
         AdjMatrix adj = new AdjMatrix(5);
         adj.addEdges(0,1);

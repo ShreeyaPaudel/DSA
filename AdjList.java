@@ -45,6 +45,26 @@ public class AdjList {
         }
     }
 
+    void depthfirstsearch(int source){
+        boolean visited[]=new boolean[vertices];
+        dfs(source, visited);
+    }
+
+    void dfs(int rootnode, boolean [] visited){
+        System.out.println(rootnode);
+        visited [rootnode]=true;
+        // getadjnodes and traverse through list
+        SingleLinkedList.Node current=adjlist[rootnode].head;
+        while (current!=null){
+            if(!visited [current.data]){
+                dfs(current.data, visited);
+            }
+            current = current.next;
+
+        }
+
+    }
+
     public static void main(String[] args) {
         AdjList adj = new AdjList(5);
         adj.addEdges(0,1);
