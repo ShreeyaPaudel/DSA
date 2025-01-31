@@ -1,21 +1,108 @@
 import java.util.List;
 import java.util.Stack;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class AdjMatrix {
+
+    //mst 
+    public static class Edge implements Comparable<Edge>{
+        int u;
+        int v;
+        int w;
+        Edge (int u , int v, int w){
+            this.u = u;
+            this.v = v;
+            this.w = w;
+
+        }
+        @Override
+        public int compareTo(Edge o){
+
+            return this.w-o.w;
+        }
+    }
+
+
+    //mst end
+
     int [][] matrix;
     int vertices;
+
+        //mst start
+
+        Edge [] edges;
+        int edgeindex=-1;
+    
+    
+        //mst end
 
     AdjMatrix(int vertices){
         this.vertices=vertices;
         matrix=new int [vertices][vertices];
+        edges = new Edge [vertices*(vertices-1)/2];//mst
     }
+
+
 
     void addEdges(int u, int v, int w){
         matrix[u][v]=w;
         matrix[v][u]=w;
+        edges [++edgeindex]=new Edge (u,v,w); //mst
 
     }
+
+    //mst
+
+    void krushkalAlgorithm(){
+        int parent[]= new int [vertices];
+        int size[] = new int [vertices];
+        int mst [][] = new int [vertices][vertices];
+        for(int i = 0; i<vertices; i++){
+            parent[i]=-1;
+        }
+        Arrays.sort(edges);
+        int edgeTaken =0;
+        int edgeCounter=-1;
+        while(edgeTaken<vertices){
+            Edge e=edges[++edgeCounter];
+            int uabsroot = find(e.u, parent);
+            int vabsroot = find(e.v, parent);
+            if(uabsroot==vabsroot){
+                //cycle detected
+                continue;
+            }
+            mst[e.u][e.v]=e.w;
+            mst[e.v][e.u]=e.w;
+            union(uabsroot, vabsroot, parent, size);
+            edgeTaken++;
+        }
+    }
+
+    void union (int uabsroot, int vabsroot, int [ ] parent, int size[]){
+        if(size [uabsroot] > size[vabsroot]){
+            parent[vabsroot] =uabsroot;
+
+        }else if (size[uabsroot]<size [vabsroot]){
+            parent [uabsroot] =vabsroot;
+        }
+        else{
+            parent[uabsroot] = vabsroot;
+            size[vabsroot]++;
+        }
+
+    } 
+
+int find (int u ,int parent[]){
+    if(parent[u]==-1){
+        return u;
+    }
+    return parent[u] = find (parent [u], parent);
+}
+
+
+
+    //mst
 
     void printGraph(){
         for(int i = 0; i<vertices;i++){
